@@ -1,3 +1,9 @@
+noseX=0
+noseY=0
+difference=0
+leftWrist=0
+rightWrist=0
+
 function setup () {
     video=createCapture(VIDEO);
     video.size(550,500);
@@ -10,18 +16,28 @@ function setup () {
 function preload(){
 
 }
-function draw(){
-    background('#1cdae8')
-}
 
 function modelLoaded(){
-    console.log("MODEL LOADED!!!");
+    console.log("POSENET IS ON, MODEL LOADED!!!")
 }
-function gotPoses(results){
-    len=results.length
 
-        if(len>0){
-            console.log(results)
-        }
-    
+function gotPoses(results){
+     if(results.length > 0){
+         console.log(results)
+         noseX=results[0].pose.nose.x
+         noseY=results[0].pose.nose.y
+         console.log("NoseX=" + noseX + "NoseY=" + noseY)
+
+         leftWrist=results[0].pose.leftWrist.x
+         rightWrist=results[0].pose.rightWrist.x
+         difference= floor(leftWrist-rightWrist)
+         console.log("Left Wrist=" + leftWrist + "Right Wrist=" + rightWrist + "Difference is=" + difference)
+
+     }
+}
+
+function draw(){
+    background('#1cdae8')
+    textSize(difference)
+    text("ARMLINK",noseX,noseY)
 }
